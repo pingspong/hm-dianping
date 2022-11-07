@@ -4,14 +4,14 @@ spring:
   application:
     name: hmdp
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/hmdp?useSSL=false&serverTimezone=UTC
-    username: root
-    password: 123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://npnuxv9blzoc6agswkrdht2q847fj0i3.mysql.qingcloud.link:3306/hmdp?useUnicode=true&characterEncoding=UTF-8&userSSL=false&serverTimezone=GMT%2B8
+    username: pingspong
+    password: Jianhua98@cc
   redis:
-    host: 192.168.150.101
+    host: 139.198.105.174
     port: 6379
-    password: 123321
+    password: jianhua
     lettuce:
       pool:
         max-active: 10
