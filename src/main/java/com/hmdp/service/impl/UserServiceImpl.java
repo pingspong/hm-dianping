@@ -39,7 +39,7 @@ import static com.hmdp.utils.SystemConstants.USER_NICK_NAME_PREFIX;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate template;
 
     @Override
     public Result sendCode(String phone, HttpSession session) {
@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String code = RandomUtil.randomNumbers(6);
 
         // session.setAttribute("code",code);
-        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        template.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         log.debug("验证码：{}", code);
 
@@ -65,7 +65,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return Result.fail("手机号格式错误");
         }
 
-        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);
+        String cacheCode = template.opsForValue().get(LOGIN_CODE_KEY + phone);
         if (cacheCode == null || !cacheCode.toString().equals(loginForm.getCode())) {
             return Result.fail("验证码错误");
         }
@@ -85,8 +85,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                         .setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
 
         String tokenKey = LOGIN_USER_KEY + token;
-        stringRedisTemplate.opsForHash().putAll(tokenKey, userMap);
-        stringRedisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        template.opsForHash().putAll(tokenKey, userMap);
+        template.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
 
         return Result.ok(token);
     }
