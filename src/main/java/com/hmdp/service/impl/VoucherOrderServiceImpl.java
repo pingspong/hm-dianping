@@ -37,9 +37,6 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
 
     @Override
     public Result seckillVoucher(Long voucherId) {
-
-        log.debug("voucher-order start, voucherId:{}",voucherId);
-
         // 1.查询优惠券
         SeckillVoucher voucher = seckillVoucherService.getById(voucherId);
         // 2.判断秒杀是否开始
@@ -57,8 +54,6 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         }
 
         Long userId = UserHolder.getUser().getId();
-
-        log.debug("userId:{}",userId);
 
         // 为避免每次toString得到新的字符串对象，需要采用intern方法将其添加字符串池
         synchronized (userId.toString().intern()){
